@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>순천만 습지 사운드 미리듣기 테스트 페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: #ffffff;
+            color: #37352f;
+            line-height: 1.5;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #37352f;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: #787774;
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+
+        .audio-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: #e9e9e7;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-item {
+            background: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: background-color 0.15s ease;
+            cursor: pointer;
+            min-height: 72px;
+        }
+
+        .audio-item:hover {
+            background: #f7f7f5;
+        }
+
+        .audio-item.playing {
+            background: #f1f3f4;
+        }
+
+        .emoji {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .audio-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .audio-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #37352f;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .audio-meta {
+            font-size: 0.875rem;
+            color: #787774;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .play-count {
+            font-size: 0.875rem;
+            color: #9b9a97;
+        }
+
+        .location-image {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 3px;
+            flex-shrink: 0;
+            border: 1px solid #e9e9e7;
+        }
+
+        .image-placeholder {
+            width: 48px;
+            height: 48px;
+            background: #f7f7f5;
+            border: 1px solid #e9e9e7;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9b9a97;
+            font-size: 0.75rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .audio-controls {
+            width: 100%;
+            margin-top: 12px;
+            height: 32px;
+        }
+
+        .audio-controls audio {
+            width: 100%;
+            height: 32px;
+        }
+
+        .play-button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #37352f;
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            flex-shrink: 0;
+            font-size: 0.875rem;
+        }
+
+        .play-button:hover {
+            background: #2f2e2a;
+        }
+
+        .play-button.playing {
+            background: #0f7b0f;
+        }
+
+        .expanded .audio-controls {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid #e9e9e7;
+            color: #9b9a97;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 16px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .audio-item {
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            
+            .location-image,
+            .image-placeholder {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>순천만 습지 사운드</h1>
+        <div class="subtitle">순천만 습지의 자연 소리를 미리 들어보세요</div>
+        
+        <div class="audio-grid">
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio1')" id="playBtn1">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🌾</span>
+                <div class="audio-content">
+                    <div class="audio-title">순꽃염전밭</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count1">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls1" style="display:none;">
+                        <audio id="audio1" preload="none">
+                            <source src="mp3/순꽃염전밭_250726.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/순꽃염전밭.jpg" alt="순꽃염전밭" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio2')" id="playBtn2">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🌊</span>
+                <div class="audio-content">
+                    <div class="audio-title">순천만 저녁 만조</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count2">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls2" style="display:none;">
+                        <audio id="audio2" preload="none">
+                            <source src="mp3/순천만 저녁 만조_250428.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/순천만저녁만조.jpg" alt="순천만 저녁 만조" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio3')" id="playBtn3">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🏞️</span>
+                <div class="audio-content">
+                    <div class="audio-title">순천만국가정원 습지</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count3">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls3" style="display:none;">
+                        <audio id="audio3" preload="none">
+                            <source src="mp3/순천만국가정원 습지_250430.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/순천만국가정원습지.jpg" alt="순천만국가정원 습지" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio4')" id="playBtn4">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🛣️</span>
+                <div class="audio-content">
+                    <div class="audio-title">여수만가는길</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count4">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls4" style="display:none;">
+                        <audio id="audio4" preload="none">
+                            <source src="mp3/여수만가는길_250723.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/여수만가는길.jpg" alt="여수만가는길" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio5')" id="playBtn5">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🌅</span>
+                <div class="audio-content">
+                    <div class="audio-title">용산전망대 새벽</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count5">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls5" style="display:none;">
+                        <audio id="audio5" preload="none">
+                            <source src="mp3/용산전망대 새벽_050725.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/용산전망대새벽.jpg" alt="용산전망대 새벽" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio6')" id="playBtn6">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🏛️</span>
+                <div class="audio-content">
+                    <div class="audio-title">용화사</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count6">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls6" style="display:none;">
+                        <audio id="audio6" preload="none">
+                            <source src="mp3/용화사_250725.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/용화사.jpg" alt="용화사" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio7')" id="playBtn7">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">🐟</span>
+                <div class="audio-content">
+                    <div class="audio-title">짱뚱어밭</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count7">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls7" style="display:none;">
+                        <audio id="audio7" preload="none">
+                            <source src="mp3/짱뚱어밭_250724.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/짱뚱어밭.jpg" alt="짱뚱어밭" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+
+            <div class="audio-item">
+                <button class="play-button" onclick="toggleAudio('audio8')" id="playBtn8">
+                    <span class="play-icon">▶️</span>
+                </button>
+                <span class="emoji">⛵</span>
+                <div class="audio-content">
+                    <div class="audio-title">화포항 저녁만조 통통배</div>
+                    <div class="audio-meta">
+                        <span class="play-count" id="count8">재생: 0회</span>
+                    </div>
+                    <div class="audio-controls" id="controls8" style="display:none;">
+                        <audio id="audio8" preload="none">
+                            <source src="mp3/화포항 저녁만조 통통배_250428.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <img src="images/화포항저녁만조통통배.jpg" alt="화포항 저녁만조 통통배" class="location-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-placeholder" style="display:none;">🇺️</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            순천만 습지의 자연 사운드 🎵 
+        </div>
+    </div>
+
+    <script>
+        const playCounts = {};
+        
+        function toggleAudio(audioId) {
+            const audio = document.getElementById(audioId);
+            const audioNumber = audioId.replace('audio', '');
+            const countElement = document.getElementById('count' + audioNumber);
+            const controlsElement = document.getElementById('controls' + audioNumber);
+            const playButton = document.getElementById('playBtn' + audioNumber);
+            const playIcon = playButton.querySelector('.play-icon');
+            const audioItem = audio.closest('.audio-item');
+            
+            // Reset all other items
+            document.querySelectorAll('.audio-item').forEach(item => {
+                if (item !== audioItem) {
+                    item.classList.remove('playing');
+                    const otherControls = item.querySelector('.audio-controls');
+                    if (otherControls) otherControls.style.display = 'none';
+                    const otherPlayBtn = item.querySelector('.play-button');
+                    if (otherPlayBtn) {
+                        otherPlayBtn.classList.remove('playing');
+                        const otherIcon = otherPlayBtn.querySelector('.play-icon');
+                        if (otherIcon) otherIcon.textContent = '▶️';
+                    }
+                }
+            });
+            
+            // Stop all other audios
+            document.querySelectorAll('audio').forEach(a => {
+                if (a !== audio && !a.paused) {
+                    a.pause();
+                    a.currentTime = 0;
+                }
+            });
+            
+            if (audio.paused) {
+                // Show controls and play
+                controlsElement.style.display = 'block';
+                audioItem.classList.add('playing');
+                playButton.classList.add('playing');
+                playIcon.textContent = '⏸️';
+                
+                audio.play().then(() => {
+                    if (!playCounts[audioId]) playCounts[audioId] = 0;
+                    playCounts[audioId]++;
+                    countElement.textContent = `재생: ${playCounts[audioId]}회`;
+                }).catch(e => {
+                    console.log('재생 실패:', e);
+                    controlsElement.style.display = 'none';
+                    audioItem.classList.remove('playing');
+                    playButton.classList.remove('playing');
+                    playIcon.textContent = '▶️';
+                });
+            } else {
+                audio.pause();
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            }
+        }
+
+        // Add event listeners for audio end
+        document.querySelectorAll('audio').forEach((audio, index) => {
+            const audioId = `audio${index + 1}`;
+            const controlsElement = document.getElementById(`controls${index + 1}`);
+            const playButton = document.getElementById(`playBtn${index + 1}`);
+            const playIcon = playButton.querySelector('.play-icon');
+            const audioItem = audio.closest('.audio-item');
+            
+            audio.addEventListener('ended', () => {
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            });
+            
+            audio.addEventListener('pause', () => {
+                if (audio.ended) return;
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            });
+        });
+    </script>
+</body>
+</html>
