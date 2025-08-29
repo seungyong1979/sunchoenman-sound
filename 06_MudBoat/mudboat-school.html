@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 거차마을 생생뻘배학교</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+const { useState, useEffect } = React;
+
+const App = () => {
+    const [isVisible, setIsVisible] = useState({});
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const galleryImages = [
+        { src: 'img/abcd2.jpg', alt: '뻘배 제작 과정' },
+        { src: 'img/abcd3.jpg', alt: '거차마을 주민들' },
+        { src: 'img/abcd4.jpg', alt: '뻘배 작업 현장' },
+        { src: 'img/abcd5.jpg', alt: '장인의 손길' },
+        { src: 'img/abcd6.jpg', alt: '뻘배 전시' },
+        { src: 'img/abcd7.jpg', alt: '마을 공동체' }
+    ];
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    setIsVisible(prev => ({
+                        ...prev,
+                        [entry.target.id]: entry.isIntersecting
+                    }));
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        const elements = document.querySelectorAll('.fade-in');
+        elements.forEach(el => observer.observe(el));
+
+        return () => {
+            elements.forEach(el => observer.unobserve(el));
+        };
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => 
+                (prevIndex + 1) % galleryImages.length
+            );
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const styles = {
+        section: {
+            padding: '80px 20px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            opacity: 0,
+            transform: 'translateY(30px)',
+            transition: 'all 0.8s ease-out'
+        },
+        sectionVisible: {
+            opacity: 1,
+            transform: 'translateY(0)'
+        },
+        hero: {
+            position: 'relative',
+            height: '100vh',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("img/abcd1.jpg")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            textAlign: 'center',
+            flexDirection: 'column',
+            maxWidth: '100%',
+            margin: 0
+        },
+        heroTitle: {
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: '700',
+            marginBottom: '20px',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+        },
+        heroSubtitle: {
+            fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
+            fontWeight: '300',
+            maxWidth: '600px',
+            textShadow: '1px 1px 3px rgba(0,0,0,0.5)'
+        },
+        scrollIndicator: {
+            position: 'absolute',
+            bottom: '40px',
+            animation: 'bounce 2s infinite'
+        },
+        quoteBlock: {
+            background: '#F5F0E8',
+            padding: '40px 30px',
+            borderRadius: '20px',
+            marginBottom: '40px',
+            textAlign: 'center',
+            fontSize: '1.3rem',
+            color: '#5D4E37',
+            fontStyle: 'italic',
+            position: 'relative'
+        },
+        narrativeText: {
+            fontSize: '1.1rem',
+            lineHeight: '2',
+            color: '#4A4A4A',
+            marginBottom: '30px'
+        },
+        sectionTitle: {
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            marginBottom: '30px',
+            color: '#3B2F2F',
+            textAlign: 'center'
+        },
+        highlightCard: {
+            background: '#FFFFFF',
+            padding: '30px',
+            borderRadius: '15px',
+            boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
+            marginBottom: '20px',
+            transition: 'all 0.3s ease',
+            cursor: 'default',
+            position: 'relative',
+            overflow: 'hidden'
+        },
+        highlightIcon: {
+            fontSize: '2.5rem',
+            marginBottom: '15px',
+            display: 'block'
+        },
+        infoGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '30px',
+            marginTop: '40px'
+        },
+        infoItem: {
+            background: '#FAF8F3',
+            padding: '25px',
+            borderRadius: '12px',
+            borderLeft: '4px solid #CD853F'
+        },
+        ctaButton: {
+            display: 'inline-block',
+            padding: '20px 50px',
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            background: '#CD853F',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '50px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 5px 15px rgba(205, 133, 63, 0.3)',
+            marginTop: '30px'
+        },
+        gallerySection: {
+            background: 'linear-gradient(135deg, #2C3E50 0%, #3B2F2F 100%)',
+            position: 'relative',
+            padding: '80px 0',
+            overflow: 'hidden'
+        },
+        galleryContainer: {
+            position: 'relative',
+            height: '500px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            borderRadius: '20px',
+            overflow: 'hidden',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+        },
+        galleryImage: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'opacity 1s ease-in-out'
+        },
+        galleryOverlay: {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
+            padding: '40px',
+            color: 'white'
+        },
+        galleryDots: {
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '10px'
+        },
+        dot: {
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.5)',
+            cursor: 'pointer',
+            transition: 'background 0.3s ease'
+        },
+        dotActive: {
+            background: 'white'
+        }
+    };
+
+    const programHighlights = [
+        { icon: '🧘‍♀️', text: '방파제 요가 & 멍 명상' },
+        { icon: '🚣', text: '뻘배 타기 & 갯벌 생태 체험' },
+        { icon: '🦀', text: '칠게 망 털기 실습' },
+        { icon: '🌅', text: '노을과 달빛 음악회' },
+        { icon: '🍚', text: '마을 주민과의 대화와 식사' },
+        { icon: '⏰', text: '순천만의 느린 시간에 머무르기' }
+    ];
+
+    return (
+        <>
+            <style jsx>{`
+                @keyframes bounce {
+                    0%, 20%, 50%, 80%, 100% {
+                        transform: translateY(0);
+                    }
+                    40% {
+                        transform: translateY(-10px);
+                    }
+                    60% {
+                        transform: translateY(-5px);
+                    }
+                }
+                
+                .highlight-card:hover {
+                    transform: translateY(-5px);
+                }
+                
+                .cta-button:hover {
+                    background: #B8763F;
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(205, 133, 63, 0.4);
+                }
+                
+                @media (max-width: 768px) {
+                    .section {
+                        padding: 60px 15px !important;
+                    }
+                    .gallery-container {
+                        height: 350px !important;
+                        margin: 0 20px !important;
+                    }
+                }
+                
+                .gallery-image {
+                    opacity: 0;
+                }
+                
+                .gallery-image.active {
+                    opacity: 1;
+                }
+            `}</style>
+
+            {/* Hero Section */}
+            <section style={styles.hero}>
+                <div>
+                    <h1 style={styles.heroTitle}>
+                        2025 생생뻘배학교 – 거차마을이 여는 슬로우 네이처 스쿨
+                    </h1>
+                    <p style={styles.heroSubtitle}>
+                        자연은 늘 그 자리에 있었습니다. 이제, 그 곁에 머무는 법을 배웁니다.
+                    </p>
+                </div>
+                <div style={styles.scrollIndicator}>
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                        <path d="M15 5L15 25M15 25L10 20M15 25L20 20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </div>
+            </section>
+
+            {/* Intro Section */}
+            <section id="intro" className="fade-in" style={{
+                ...styles.section,
+                ...(isVisible.intro ? styles.sectionVisible : {})
+            }}>
+                <div style={styles.quoteBlock} className="serif">
+                    "뻘배는 우리 갯벌을 닮았습니다. 느리지만 묵묵하게 길을 내지요."
+                </div>
+                <p style={styles.narrativeText}>
+                    순천만의 아침은 바다보다 먼저 깨어나는 사람들의 손끝에서 시작됩니다. 
+                    갯벌 위를 미끄러지듯 달리는 '뻘배'는 순천만의 삶을 상징하는 작은 배입니다. 
+                    이제 이 뻘배가 단순한 어업 도구를 넘어, 순천만의 문화자원으로 다시 태어나려 합니다.
+                </p>
+            </section>
+
+            {/* About Section */}
+            <section id="about" className="fade-in" style={{
+                ...styles.section,
+                background: '#FAFAFA',
+                ...(isVisible.about ? styles.sectionVisible : {})
+            }}>
+                <h2 style={styles.sectionTitle}>거차마을, 뻘배학교를 열다</h2>
+                <p style={styles.narrativeText}>
+                    거차마을 주민들이 여는 '생생 뻘배학교'에서는 오랜 세월 뻘배와 살아온 주민들이 
+                    직접 뻘배 타는 법을 가르치고, 참여자들은 순천만 갯벌 생태와 조류, 
+                    물때에 맞춰 숨 쉬는 자연의 리듬을 온몸으로 배웁니다.
+                </p>
+            </section>
+
+            {/* Gallery Section */}
+            <section style={styles.gallerySection}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+                    <h2 style={{...styles.sectionTitle, color: 'white', marginBottom: '50px'}}>
+                        마을의 이야기
+                    </h2>
+                    <div style={styles.galleryContainer} className="gallery-container">
+                        {galleryImages.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image.src}
+                                alt={image.alt}
+                                style={styles.galleryImage}
+                                className={`gallery-image ${index === currentImageIndex ? 'active' : ''}`}
+                            />
+                        ))}
+                        <div style={styles.galleryOverlay}>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
+                                {galleryImages[currentImageIndex].alt}
+                            </h3>
+                        </div>
+                        <div style={styles.galleryDots}>
+                            {galleryImages.map((_, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        ...styles.dot,
+                                        ...(index === currentImageIndex ? styles.dotActive : {})
+                                    }}
+                                    onClick={() => setCurrentImageIndex(index)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Program Highlights */}
+            <section id="highlights" className="fade-in" style={{
+                ...styles.section,
+                ...(isVisible.highlights ? styles.sectionVisible : {})
+            }}>
+                <h2 style={styles.sectionTitle}>이런 경험을 합니다</h2>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    gap: '20px'
+                }}>
+                    {programHighlights.map((item, index) => (
+                        <div key={index} style={styles.highlightCard} className="highlight-card">
+                            <span style={styles.highlightIcon}>{item.icon}</span>
+                            <p style={{ fontSize: '1.1rem', color: '#5D4E37' }}>{item.text}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Why It Matters */}
+            <section id="why" className="fade-in" style={{
+                ...styles.section,
+                background: 'linear-gradient(to right, rgba(245,240,232,0.95), rgba(245,240,232,0.95)), url("img/abcd6.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+                ...(isVisible.why ? styles.sectionVisible : {})
+            }}>
+                <h2 style={styles.sectionTitle}>단순한 체험이 아닙니다</h2>
+                <div style={{
+                    fontSize: '1.2rem',
+                    lineHeight: '2',
+                    color: '#4A4A4A',
+                    textAlign: 'center',
+                    maxWidth: '800px',
+                    margin: '0 auto'
+                }}>
+                    <p style={{ marginBottom: '30px', fontWeight: '500' }}>
+                        "갯벌에 직접 나가서 뻘배를 타보면, 단순히 '재미'가 아닙니다.<br/>
+                        뻘 속 생명, 그 생명을 돌보는 어민의 삶, 그 모든 것이 연결돼 있다는 걸 느끼게 됩니다."
+                    </p>
+                    <p>
+                        생생뻘배학교는 '전시용 체험'이 아니라 지속 가능한 생태관광을 꿈꿉니다. 
+                        그 중심에는 마을이 있습니다.
+                    </p>
+                </div>
+            </section>
+
+            {/* Info Section */}
+            <section id="info" className="fade-in" style={{
+                ...styles.section,
+                ...(isVisible.info ? styles.sectionVisible : {})
+            }}>
+                <h2 style={styles.sectionTitle}>운영정보</h2>
+                <div style={styles.infoGrid}>
+                    <div style={styles.infoItem}>
+                        <h3 style={{ marginBottom: '10px', color: '#CD853F' }}>📅 날짜</h3>
+                        <p>2025년 일정 상시 운영 (1박 2일)</p>
+                    </div>
+                    <div style={styles.infoItem}>
+                        <h3 style={{ marginBottom: '10px', color: '#CD853F' }}>📍 장소</h3>
+                        <p>전라남도 순천시 해룡면 거차마을</p>
+                    </div>
+                    <div style={styles.infoItem}>
+                        <h3 style={{ marginBottom: '10px', color: '#CD853F' }}>🏘️ 주최</h3>
+                        <p>거차마을 어촌계</p>
+                    </div>
+                    <div style={styles.infoItem}>
+                        <h3 style={{ marginBottom: '10px', color: '#CD853F' }}>🎯 주관</h3>
+                        <p>2025 순천세계유산축전</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Call to Action */}
+            <section id="cta" className="fade-in" style={{
+                ...styles.section,
+                textAlign: 'center',
+                paddingBottom: '100px',
+                ...(isVisible.cta ? styles.sectionVisible : {})
+            }}>
+                <h2 style={styles.sectionTitle}>참여 신청하기</h2>
+                <p style={{ fontSize: '1.2rem', marginBottom: '40px', color: '#666' }}>
+                    자연과 마을의 삶을 느껴보고 싶은 분이라면 누구든지 환영합니다.
+                </p>
+                <a 
+                    href="https://scwhf.com/tiny/apps/form/form.php?id=24" 
+                    style={styles.ctaButton}
+                    className="cta-button"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    생생뻘배학교 신청하러 가기
+                </a>
+            </section>
+        </>
+    );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
