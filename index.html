@@ -1,130 +1,776 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>생생뻘배학교 – 순천 거차마을</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-      background-color: #fefcf9;
-      color: #2e2e2e;
-      text-align: center;
-      line-height: 1.7;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>순천만 습지 사운드 미리듣기 테스트 페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.5;
+            padding: 0;
+            margin: 0;
+            position: relative;
+        }
 
-    h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
-    }
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+            transition: opacity 0.8s ease-in-out, background-image 0.8s ease-in-out;
+        }
 
-    h2 {
-      font-size: 1.3rem;
-      font-weight: normal;
-      color: #666;
-      margin-bottom: 2rem;
-    }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            position: relative;
+            z-index: 1;
+        }
 
-    section {
-      margin-bottom: 4rem;
-    }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
 
-    .hero-img, .content-img {
-      width: 100%;
-      max-width: 800px;
-      border-radius: 10px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
-      margin: 2rem 0;
-    }
+        .subtitle {
+            font-size: 1.125rem;
+            color: #cccccc;
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
 
-    .quote {
-      font-style: italic;
-      color: #444;
-      margin: 2rem 0;
-    }
+        .audio-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    .button {
-      display: inline-block;
-      background-color: #2e7d32;
-      color: #fff;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      text-decoration: none;
-      margin-top: 2rem;
-      transition: background-color 0.3s ease;
-    }
+        .audio-item {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #333333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
 
-    .button:hover {
-      background-color: #1b5e20;
-    }
-  </style>
+        .audio-item:hover {
+            border-color: #555555;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .audio-item.playing {
+            border-color: #ffffff;
+            box-shadow: 0 8px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .emoji {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .audio-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .audio-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #ffffff 0%, #cccccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .audio-description {
+            font-size: 1rem;
+            color: #cccccc;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .audio-meta {
+            font-size: 0.875rem;
+            color: #888888;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .play-count {
+            font-size: 0.875rem;
+            color: #9b9a97;
+        }
+
+        .image-area {
+            width: 100%;
+            height: 400px;
+            background: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-area::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+        }
+
+        .location-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            loading: lazy;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666666;
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        .controls-area {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .audio-controls {
+            width: 100%;
+            margin-top: 12px;
+            position: relative;
+        }
+
+        .custom-audio-player {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #333333;
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff 0%, #cccccc 100%);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888888;
+        }
+
+        .audio-controls audio {
+            display: none;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid #333333;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .play-button:hover {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .play-button.playing {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            color: #000000;
+            border-color: #ffffff;
+        }
+
+        .expanded .audio-controls {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid #e9e9e7;
+            color: #9b9a97;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 16px;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 32px;
+            }
+            
+            .audio-grid {
+                gap: 16px;
+            }
+            
+            .image-area {
+                height: 350px; /* 이미지 영역 높이 증가 */
+            }
+            
+            .controls-area {
+                padding: 16px;
+                gap: 16px;
+            }
+            
+            .play-button {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+            
+            .audio-title {
+                font-size: 1.25rem;
+            }
+            
+            .audio-description {
+                font-size: 0.875rem;
+                margin-bottom: 8px;
+            }
+            
+            .audio-meta {
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-area {
+                height: 300px; /* 더 작은 화면에서는 적당한 높이 유지 */
+            }
+            
+            .audio-title {
+                font-size: 1.1rem;
+            }
+            
+            .play-button {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="background-image" id="backgroundImage"></div>
+    <div class="container">
+        <h1>순천만 습지 사운드 아카이브 (2025)</h1>
+        <div class="subtitle">순천만 습지의 자연 소리를 미리 들어보세요</div>
+        
+        <div class="audio-grid">
+            <div class="audio-item" data-bg="images/suncheon_salt_field_105.jpg">
+                <div class="image-area">
+                    <img src="images/suncheon_salt_field_105.jpg" alt="순꽃염전밭" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio1')" id="playBtn1">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">순꽃염전밭</div>
+                        <div class="audio-description">순천 염전의 고요한 오후, 소금꾼의 발걸음이 거울 같은 염전 위에 잔잔한 물결을 그립니다. 드넓은 하늘이 염전에 온전히 비치고, 멀리 산자락까지 평온하게 펼쳐진 풍경 속에서 시간이 천천히 흘러갑니다. 삽질 소리와 바람 소리가 어우러져 만들어내는 자연의 선율, 수백 년을 이어온 염전의 이야기가 발밑 하얀 소금 결정 위로 스며듭니다. 일상의 소중함을 일깨워주는 평화로운 순간입니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count1">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls1" style="display:none;">
+                            <audio id="audio1" preload="none">
+                                <source src="mp3/순꽃염전밭_250726.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio1')">
+                                    <div class="progress-bar" id="progress1"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime1">0:00</span>
+                                    <span id="duration1">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  <div class="container">
-    <h1>2025 생생뻘배학교</h1>
-    <h2>순천 거차마을에서 배우는 느림과 연결의 삶</h2>
-        <section>
-            <table><tr><td>  <img src="img/ppurbae_schedule0.jpg" alt="뻘배학교 일정표" class="content-img"></td>
-            <td>     <img src="img/ppurbae_schedule.png" alt="뻘배학교 일정표" class="content-img"></td>
-            </tr></table>
-    
-       
-      <h2>📅 프로그램 일정</h2>
-      <p>
-        입학식부터 갯벌 체험, 뻘배 교육, 달빛 음악회까지  
-        하루하루를 오롯이 ‘쉼’과 ‘느림’으로 채워가는 시간입니다.
-      </p>
-    </section>
+            <div class="audio-item" data-bg="images/suncheon_bay_night_1.jpg">
+                <div class="image-area">
+                    <img src="images/suncheon_bay_night_1.jpg" alt="순천만 저녁 만조" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio2')" id="playBtn2">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">순천만 저녁 만조</div>
+                        <div class="audio-description">칠흑 같은 하늘 아래 순천만의 고요한 밤이 펼쳐집니다. 만조를 맞은 바닷물이 갯벌의 작은 골들을 따라 스르르 채워지며, 갈대밭 사이로 잔잔한 파도 소리가 속삭입니다. 별빛이 수면에 흩뿌려진 이 순간, 자연의 리듬에 맞춰 흘러가는 물소리가 마음 깊은 곳까지 평온함을 전해줍니다. 시간이 멈춘 듯한 순천만의 밤, 도시의 소음을 잊고 자연과 하나 되는 특별한 치유의 시간입니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count2">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls2" style="display:none;">
+                            <audio id="audio2" preload="none">
+                                <source src="mp3/순천만 저녁 만조_250428.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio2')">
+                                    <div class="progress-bar" id="progress2"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime2">0:00</span>
+                                    <span id="duration2">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <section>
-      <img src="img/ppurbae_main.jpg" alt="갯벌과 뻘배 사진" class="hero-img">
-      <p class="quote">“뻘배는 우리 갯벌을 닮았습니다. 느리지만 묵묵하게 길을 내지요.”</p>
-      <p>
-        순천만의 아침은 바다보다 먼저 깨어나는 사람들의 손끝에서 시작됩니다.  
-        갯벌 위를 미끄러지듯 달리는 ‘뻘배’는 순천만의 삶을 상징하는 작은 배입니다.  
-        이제 이 뻘배가 단순한 어업 도구를 넘어, 순천만의 문화자원으로 다시 태어나려 합니다.
-      </p>
-    </section>
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/suncheon_wetland_250430.jpg" alt="순천만국가정원 습지" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio3')" id="playBtn3">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">순천만국가정원 습지</div>
+                        <div class="audio-description">순천국가정원 습지의 푸른 오후, 나무 그늘 아래서 바라본 세상은 온통 생명력으로 가득합니다. 물길을 따라 펼쳐진 초록 들판 위로 새들의 지저귐이 아름다운 선율을 만들어냅니다. 바람에 살랑이는 갈대 소리와 어우러진 새소리가 마음을 정화시키고, 멀리 보이는 다리와 함께 어우러진 자연의 풍경이 평온함을 선사합니다. 도시 속에서 만나는 야생의 소리, 새들이 들려주는 자연의 노래가 일상에 지친 마음에 깊은 위로를 전해줍니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count3">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls3" style="display:none;">
+                            <audio id="audio3" preload="none">
+                                <source src="mp3/순천만국가정원 습지_250430.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio3')">
+                                    <div class="progress-bar" id="progress3"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime3">0:00</span>
+                                    <span id="duration3">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <section>
-      <img src="img/ppurbae_teacher.jpg" alt="마을 주민 교육 모습" class="content-img">
-      <h2>거차마을이 여는 뻘배학교</h2>
-      <p>
-        생생뻘배학교는 거차마을 주민들이 직접 운영하는 1박 2일 생태학교입니다.  
-        오랜 세월 뻘배와 함께 살아온 어민들이 직접 뻘배 타는 법을 가르치고,  
-        참가자들은 갯벌 생태, 물때, 조류의 리듬을 온몸으로 체험하게 됩니다.
-      </p>
-    </section>
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/suncheon_bay_evening_2.jpg" alt="여수만가는길" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio4')" id="playBtn4">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">순천만가는길</div>
+                        <div class="audio-description">여수만과 순천만이 만나는 경계의 여름 밤, 별빛이 수놓인 하늘 아래 고요한 만조의 바다가 펼쳐집니다. 잔잔한 파도가 해안에 부드럽게 부딪히며 만들어내는 리듬과 풀벌레들의 은은한 합창이 어우러져 자연의 완벽한 선율을 연주합니다. 멀리 반짝이는 불빛들이 수면에 길게 반사되고, 나무 그늘 아래 데크에서 바라본 이 풍경은 마치 꿈속 같습니다. 도시의 번잡함을 잊게 해주는 평온한 밤, 자연이 선사하는 깊은 위로를 온몸으로 느낄 수 있는 특별한 순간입니다..</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count4">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls4" style="display:none;">
+                            <audio id="audio4" preload="none">
+                                <source src="mp3/여수만가는길_250723.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio4')">
+                                    <div class="progress-bar" id="progress4"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime4">0:00</span>
+                                    <span id="duration4">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <section>
-      <img src="img/ppurbae_kids.jpg" alt="아이들과 갯벌 체험" class="content-img">
-      <h2>배움은 곧 연결입니다</h2>
-      <p>
-        단순한 체험이 아니라, 마을과 자연, 사람과 삶이 연결되는 진짜 배움의 시간입니다.  
-        물결처럼 잔잔한 순천만의 오후, 해가 질 무렵엔 달빛 음악회도 열립니다.  
-        뻘배는 순천만의 자연과 문화를 연결하는 새로운 배움의 플랫폼이 되어갑니다.
-      </p>
-    </section>
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/f7a6e0bb-e782-474f-ad74-d8722713fd1c_rw_1920.jpg" alt="용산전망대 새벽" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio5')" id="playBtn5">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">용산전망대 새벽</div>
+                        <div class="audio-description">여름밤이 새벽으로 넘어가는 그 경계의 시간, 순천만 전망대는 소리의 교향곡으로 가득합니다.
+밤새 울어대던 매미들이 새벽 공기와 함께 마지막 열창을 토해내고, 그 사이로 이른 새들의 지저귐이 하나둘 스며들기 시작합니다. 참새와 직박구리들이 먼저 깨어나 작은 속삭임으로 하루를 열고, 곧이어 까치와 까마귀들의 힘찬 울음소리가 공기를 가릅니다.
+바람은 갈대밭을 스치며 사르르 소리를 내고, 바다 위를 건드리며 잔잔한 파도 소리를 만들어냅니다. 나뭇잎들이 바람에 살랑이며 내는 속삭임과 함께, 자연의 모든 생명체들이 하나의 거대한 합창단이 되어 새로운 하루의 시작을 알립니다.
+이 모든 소리들이 별궤적이 그어진 하늘 아래 어우러져, 도시에서는 결코 들을 수 없는 순수하고 원시적인 자연의 선율을 만들어냅니다. 매미의 열정, 새들의 희망, 바람의 자유로움이 하나로 녹아든 이 순간은 마음 깊은 곳까지 평온함을 전해주는 특별한 시간입니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count5">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls5" style="display:none;">
+                            <audio id="audio5" preload="none">
+                                <source src="mp3/용산전망대 새벽_050725.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio5')">
+                                    <div class="progress-bar" id="progress5"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime5">0:00</span>
+                                    <span id="duration5">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/2735d748-2083-4502-848e-7332b66ff16f_rw_1920.jpg" alt="용화사" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio6')" id="playBtn6">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">용화사</div>
+                        <div class="audio-description">용화사에서 들려오는 목탁소리가 바다 위로 은은하게 퍼져나갑니다. 스님들의 깊고 중후한 독경소리가 고요한 공기를 가르며, 마음 깊은 곳까지 스며드는 평온함을 전해줍니다. 그 사이로 풀벌레들의 작은 소리가 자연스럽게 어우러져 전통이 살아 숨 쉬는 신성한 공간임을 느끼게 합니다. 목탁의 규칙적인 리듬과 불경소리가 바다와 산을 가득 채우며, 세속의 번뇌를 잊게 해주는 깊은 명상의 시간을 선사합니다. 이곳에서 들리는 소리는 단순한 자연음이 아닌 영혼을 정화하는 신성한 울림입니다. </div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count6">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls6" style="display:none;">
+                            <audio id="audio6" preload="none">
+                                <source src="mp3/용화사_250725.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio6')">
+                                    <div class="progress-bar" id="progress6"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime6">0:00</span>
+                                    <span id="duration6">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <section>
-      <h2>함께 하실래요?</h2>
-      <p>
-        생생뻘배학교는 순천세계유산축전 공모사업의 일환으로 운영되며,  
-        순천만을 느끼고 마을과 연결되는 새로운 경험을 원하는 누구나 신청하실 수 있습니다.
-      </p>
-      <a class="button" href="https://scwhf.com/tiny/apps/form/form.php?id=24" target="_blank">지금 신청하기</a>
-    </section>
-  </div>
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/mudskipper_18.jpg" alt="짱뚱어밭" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio7')" id="playBtn7">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">짱뚱어밭</div>
+                        <div class="audio-description">짱순천만의 썰물이 빠진 뻘 위에서 짱뚱어들이 자유롭게 뛰어노는 평화로운 오후입니다. 진흙 위를 통통 튀며 움직이는 작은 발자국 소리와 물이 빠지며 만들어내는 보글보글 소리가 습지만의 독특한 선율을 연주합니다. 갯벌에서 먹이를 찾는 짱뚱어들의 작은 움직임이 만드는 소리, 멀리서 들려오는 갈매기 울음소리와 바람에 흔들리는 갈대 소리가 어우러져 생명력 넘치는 자연의 교향곡을 만들어냅니다. 이 작은 생명체들이 살아가는 모습에서 순천만 생태계의 소중함과 자연의 신비로움을 느낄 수 있습니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count7">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls7" style="display:none;">
+                            <audio id="audio7" preload="none">
+                                <source src="mp3/짱뚱어밭_250724.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio7')">
+                                    <div class="progress-bar" id="progress7"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime7">0:00</span>
+                                    <span id="duration7">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="audio-item" data-bg="images/default.jpg">
+                <div class="image-area">
+                    <img src="images/suncheon_bay_night_5.jpg" alt="화포항 저녁만조 통통배" class="location-image" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="image-placeholder" style="display:none;">이미지</div>
+                </div>
+                <div class="controls-area">
+                    <button class="play-button" onclick="toggleAudio('audio8')" id="playBtn8">
+                        <span class="play-icon">▶️</span>
+                    </button>
+                    <div class="audio-content">
+                        <div class="audio-title">화포항 저녁만조 통통배</div>
+                        <div class="audio-description">순천만 화포항의 고요한 밤, 만조로 가득 찬 바닷물 위에 어선들이 평화롭게 떠 있습니다. 잔잔한 파도가 배 옆구리에 부드럽게 부딪히며 만들어내는 맑고 경쾌한 물소리가 밤의 정적을 깨뜨립니다. 통통통, 찰박찰박, 배들이 물결에 살짝 흔들리며 내는 리듬감 있는 소리가 자장가처럼 마음을 편안하게 해줍니다. 멀리 다리 위의 불빛들이 수면에 길게 반사되고, 어선 위 따뜻한 조명이 어둠을 밝히는 가운데, 파도와 배가 만들어내는 자연스러운 선율이 화포항의 평온한 밤을 가득 채웁니다.</div>
+                        <div class="audio-meta">
+                            <span class="play-count" id="count8">재생: 0회</span>
+                        </div>
+                        <div class="audio-controls" id="controls8" style="display:none;">
+                            <audio id="audio8" preload="none">
+                                <source src="mp3/화포항 저녁만조 통통배_250428.mp3" type="audio/mpeg">
+                            </audio>
+                            <div class="custom-audio-player">
+                                <div class="progress-container" onclick="seekAudio(event, 'audio8')">
+                                    <div class="progress-bar" id="progress8"></div>
+                                </div>
+                                <div class="time-info">
+                                    <span id="currentTime8">0:00</span>
+                                    <span id="duration8">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            순천만 습지의 자연 사운드 🎵 
+        </div>
+    </div>
+
+    <script>
+        const playCounts = {};
+        
+        // Background image switching based on scroll
+        function updateBackground() {
+            const audioItems = document.querySelectorAll('.audio-item[data-bg]');
+            const backgroundImage = document.getElementById('backgroundImage');
+            let currentBg = null;
+            
+            audioItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const viewHeight = window.innerHeight;
+                
+                // Check if item is in viewport (more than 30% visible)
+                if (rect.top < viewHeight * 0.7 && rect.bottom > viewHeight * 0.3) {
+                    const bgImage = item.getAttribute('data-bg');
+                    const imgElement = item.querySelector('.location-image');
+                    if (imgElement && imgElement.src) {
+                        // Use the actual image src instead of data-bg
+                        currentBg = imgElement.src;
+                    }
+                }
+            });
+            
+            if (currentBg && backgroundImage.style.backgroundImage !== `url('${currentBg}')`) {
+                backgroundImage.style.backgroundImage = `url('${currentBg}')`;
+            }
+        }
+        
+        // Initialize with first image
+        window.addEventListener('load', () => {
+            const firstItem = document.querySelector('.audio-item .location-image');
+            const backgroundImage = document.getElementById('backgroundImage');
+            if (firstItem && firstItem.src) {
+                backgroundImage.style.backgroundImage = `url('${firstItem.src}')`;
+            }
+            updateBackground();
+        });
+        
+        // Update background on scroll
+        let scrollTimer = null;
+        window.addEventListener('scroll', () => {
+            if (scrollTimer) clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(updateBackground, 10);
+        });
+        
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress(audio, audioNumber) {
+            const progressBar = document.getElementById(`progress${audioNumber}`);
+            const currentTimeElement = document.getElementById(`currentTime${audioNumber}`);
+            const durationElement = document.getElementById(`duration${audioNumber}`);
+            
+            if (progressBar && currentTimeElement && durationElement) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+                currentTimeElement.textContent = formatTime(audio.currentTime);
+                durationElement.textContent = formatTime(audio.duration);
+            }
+        }
+
+        function seekAudio(event, audioId) {
+            const audio = document.getElementById(audioId);
+            const progressContainer = event.currentTarget;
+            const clickX = event.offsetX;
+            const width = progressContainer.offsetWidth;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        }
+
+        function toggleAudio(audioId) {
+            const audio = document.getElementById(audioId);
+            const audioNumber = audioId.replace('audio', '');
+            const countElement = document.getElementById('count' + audioNumber);
+            const controlsElement = document.getElementById('controls' + audioNumber);
+            const playButton = document.getElementById('playBtn' + audioNumber);
+            const playIcon = playButton.querySelector('.play-icon');
+            const audioItem = audio.closest('.audio-item');
+            
+            // Reset all other items
+            document.querySelectorAll('.audio-item').forEach(item => {
+                if (item !== audioItem) {
+                    item.classList.remove('playing');
+                    const otherControls = item.querySelector('.audio-controls');
+                    if (otherControls) otherControls.style.display = 'none';
+                    const otherPlayBtn = item.querySelector('.play-button');
+                    if (otherPlayBtn) {
+                        otherPlayBtn.classList.remove('playing');
+                        const otherIcon = otherPlayBtn.querySelector('.play-icon');
+                        if (otherIcon) otherIcon.textContent = '▶️';
+                    }
+                }
+            });
+            
+            // Stop all other audios
+            document.querySelectorAll('audio').forEach(a => {
+                if (a !== audio && !a.paused) {
+                    a.pause();
+                    a.currentTime = 0;
+                }
+            });
+            
+            if (audio.paused) {
+                // Show controls and play
+                controlsElement.style.display = 'block';
+                audioItem.classList.add('playing');
+                playButton.classList.add('playing');
+                playIcon.textContent = '⏸️';
+                
+                audio.play().then(() => {
+                    if (!playCounts[audioId]) playCounts[audioId] = 0;
+                    playCounts[audioId]++;
+                    countElement.textContent = `재생: ${playCounts[audioId]}회`;
+                }).catch(e => {
+                    console.log('재생 실패:', e);
+                    controlsElement.style.display = 'none';
+                    audioItem.classList.remove('playing');
+                    playButton.classList.remove('playing');
+                    playIcon.textContent = '▶️';
+                });
+            } else {
+                audio.pause();
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            }
+        }
+
+        // Add event listeners for audio end
+        document.querySelectorAll('audio').forEach((audio, index) => {
+            const audioId = `audio${index + 1}`;
+            const audioNumber = index + 1;
+            const controlsElement = document.getElementById(`controls${audioNumber}`);
+            const playButton = document.getElementById(`playBtn${audioNumber}`);
+            const playIcon = playButton.querySelector('.play-icon');
+            const audioItem = audio.closest('.audio-item');
+            
+            audio.addEventListener('loadedmetadata', () => {
+                updateProgress(audio, audioNumber);
+            });
+            
+            audio.addEventListener('timeupdate', () => {
+                updateProgress(audio, audioNumber);
+            });
+            
+            audio.addEventListener('ended', () => {
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            });
+            
+            audio.addEventListener('pause', () => {
+                if (audio.ended) return;
+                controlsElement.style.display = 'none';
+                audioItem.classList.remove('playing');
+                playButton.classList.remove('playing');
+                playIcon.textContent = '▶️';
+            });
+        });
+    </script>
 </body>
 </html>
