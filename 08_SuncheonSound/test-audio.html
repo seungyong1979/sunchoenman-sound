@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Test Page</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Audio Playback Test</h1>
+    
+    <h2>Direct Audio Test:</h2>
+    <audio controls preload="auto">
+        <source src="mp3/2024.12.03_doorumi.mp3" type="audio/mpeg">
+        <source src="mp3/2024.12.03_doorumi.mp3" type="audio/mp3">
+        Your browser does not support audio.
+    </audio>
+    
+    <h2>JavaScript Audio Test:</h2>
+    <button onclick="testAudio()">Test Audio Playback</button>
+    <div id="audio-status"></div>
+    
+    <h2>Console Output:</h2>
+    <div id="console-output" style="background: #f0f0f0; padding: 10px; font-family: monospace; white-space: pre-wrap;"></div>
+    
+    <script>
+        const output = document.getElementById('console-output');
+        const status = document.getElementById('audio-status');
+        
+        // Override console.log to display on page
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog(...args);
+            output.textContent += args.join(' ') + '\n';
+        };
+        
+        console.error = function(...args) {
+            originalLog(...args);
+            output.textContent += 'ERROR: ' + args.join(' ') + '\n';
+        };
+        
+        function testAudio() {
+            console.log('Starting audio test...');
+            const audio = new Audio('mp3/2024.12.03_doorumi.mp3');
+            
+            audio.addEventListener('loadstart', () => {
+                console.log('Load started');
+                status.textContent = 'Loading...';
+            });
+            
+            audio.addEventListener('loadeddata', () => {
+                console.log('Data loaded');
+                status.textContent = 'Data loaded';
+            });
+            
+            audio.addEventListener('canplay', () => {
+                console.log('Can play');
+                status.textContent = 'Ready to play';
+            });
+            
+            audio.addEventListener('error', (e) => {
+                console.error('Audio error:', e);
+                console.error('Error code:', audio.error?.code);
+                console.error('Error message:', audio.error?.message);
+                status.textContent = 'Error loading audio';
+            });
+            
+            audio.play().then(() => {
+                console.log('Playing successfully');
+                status.textContent = 'Playing';
+            }).catch(err => {
+                console.error('Play error:', err.name, err.message);
+                status.textContent = 'Play failed: ' + err.message;
+            });
+        }
+        
+        // Test CORS
+        fetch('mp3/2024.12.03_doorumi.mp3', { mode: 'cors' })
+            .then(response => {
+                console.log('CORS test - Status:', response.status);
+                console.log('CORS test - Headers:', Object.fromEntries(response.headers));
+            })
+            .catch(err => {
+                console.error('CORS test failed:', err);
+            });
+        
+        // Check browser audio support
+        const audio = document.createElement('audio');
+        console.log('Audio element supported:', 'canPlayType' in audio);
+        console.log('MP3 support:', audio.canPlayType('audio/mpeg'));
+        console.log('MP3 support (audio/mp3):', audio.canPlayType('audio/mp3'));
+    </script>
+</body>
+</html>
