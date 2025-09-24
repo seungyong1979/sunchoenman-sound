@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Page</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Debug Information</h1>
+    
+    <h2>Current URL Information:</h2>
+    <div id="url-info"></div>
+    
+    <h2>Resource Tests:</h2>
+    <div id="test-results"></div>
+    
+    <script>
+        // Display URL information
+        const urlInfo = document.getElementById('url-info');
+        urlInfo.innerHTML = `
+            <p>Full URL: ${window.location.href}</p>
+            <p>Protocol: ${window.location.protocol}</p>
+            <p>Host: ${window.location.host}</p>
+            <p>Pathname: ${window.location.pathname}</p>
+            <p>Base URL: ${window.location.origin}</p>
+        `;
+        
+        // Test resources
+        const testResults = document.getElementById('test-results');
+        const resources = [
+            { type: 'CSS', url: 'style.css' },
+            { type: 'JavaScript', url: 'script.js' },
+            { type: 'Image', url: 'img/2024.12.03_doorumi.jpg' },
+            { type: 'MP3', url: 'mp3/2024.12.03_doorumi.mp3' }
+        ];
+        
+        resources.forEach(resource => {
+            fetch(resource.url, { method: 'HEAD' })
+                .then(response => {
+                    const result = `
+                        <div style="margin: 10px 0; padding: 10px; background: ${response.ok ? '#d4edda' : '#f8d7da'};">
+                            <strong>${resource.type}:</strong> ${resource.url}<br>
+                            Status: ${response.status} ${response.statusText}<br>
+                            Content-Type: ${response.headers.get('Content-Type')}<br>
+                            ${!response.ok ? `Error: File not found or inaccessible` : 'Success!'}
+                        </div>
+                    `;
+                    testResults.innerHTML += result;
+                })
+                .catch(error => {
+                    const result = `
+                        <div style="margin: 10px 0; padding: 10px; background: #f8d7da;">
+                            <strong>${resource.type}:</strong> ${resource.url}<br>
+                            Error: ${error.message}
+                        </div>
+                    `;
+                    testResults.innerHTML += result;
+                });
+        });
+        
+        // Test if folders exist
+        const folders = ['img/', 'mp3/'];
+        folders.forEach(folder => {
+            fetch(folder)
+                .then(response => {
+                    console.log(`Folder ${folder}: Status ${response.status}`);
+                })
+                .catch(error => {
+                    console.error(`Folder ${folder}: Error ${error.message}`);
+                });
+        });
+    </script>
+</body>
+</html>
