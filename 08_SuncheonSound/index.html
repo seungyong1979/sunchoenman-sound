@@ -23,9 +23,9 @@
             </div>
 
             <p class="description" 
-               data-ko="2024년 겨울, 순천만습지에 흑두루미가 찾아왔습니다. 바람을 가르며 날아드는 그들의 날갯짓, 서로를 부르며 울어대는 낯설고도 경이로운 울음소리, 그리고 그 소리의 배경이 되어주는 갈대숲의 잎들이 바람에 흔들리는 부드러운 사각임까지. 눈을 감고 귀를 기울이면, 그날의 순천이 다시 피어납니다. 우리는 단지 소리를 들었을 뿐인데, 그 순간의 풍경이, 공기의 감촉이, 마음의 떨림까지도 선명하게 되살아납니다. 소리는 기억보다 오래 남는 감각입니다. 어디에 있든, 이 소리를 들으며 그날의 순천을 마음 안에 다시 펼쳐보세요. 이건 단지 자연의 소리가 아니라, 우리가 함께 숨 쉬며 기억한 시간의 조각입니다."
+               data-ko="순천만습지에 흑두루미가 찾아왔습니다. 바람을 가르며 날아드는 날갯짓, 서로를 부르며 울어대는 소리, 바람에 흔들리는 갈대 소리까지. 눈을 감고 귀를 기울이면 그날의 순천이 되살아납니다. 우리는 단지 소리를 들었을 뿐인데 풍경과 공기, 마음의 떨림까지도 선명히 돌아옵니다. 소리는 기억보다 오래 남는 감각이자 마음을 회복시키는 조용한 힘입니다. 이 소리 풍경을 들으며 어디서든 그날의 순천을 마음에 펼쳐보세요."
                data-en="In the winter of 2024, the hooded cranes returned to Suncheonman Wetland. You can hear the beating of their wings as they soar through the sky, their haunting cries as they call out to one another, and the soft rustling of reeds swaying gently in the breeze. Close your eyes and listen—Suncheon comes alive once more. Just through sound, the scenery we once held in our eyes, the texture of the air, even the quiet stirrings of our hearts return vividly. Sound lingers longer than memory. Wherever you are, let this sound take you back to that moment in Suncheon. It's more than just the sound of nature—it's a piece of time we breathed and remembered together.">
-               2024년 겨울, 순천만습지에 흑두루미가 찾아왔습니다. 바람을 가르며 날아드는 그들의 날갯짓, 서로를 부르며 울어대는 낯설고도 경이로운 울음소리, 그리고 그 소리의 배경이 되어주는 갈대숲의 잎들이 바람에 흔들리는 부드러운 사각임까지. 눈을 감고 귀를 기울이면, 그날의 순천이 다시 피어납니다. 우리는 단지 소리를 들었을 뿐인데, 그 순간의 풍경이, 공기의 감촉이, 마음의 떨림까지도 선명하게 되살아납니다. 소리는 기억보다 오래 남는 감각입니다. 어디에 있든, 이 소리를 들으며 그날의 순천을 마음 안에 다시 펼쳐보세요. 이건 단지 자연의 소리가 아니라, 우리가 함께 숨 쉬며 기억한 시간의 조각입니다.
+               순천만습지에 흑두루미가 찾아왔습니다. 바람을 가르며 날아드는 날갯짓, 서로를 부르며 울어대는 소리, 바람에 흔들리는 갈대 소리까지. 눈을 감고 귀를 기울이면 그날의 순천이 되살아납니다. 우리는 단지 소리를 들었을 뿐인데 풍경과 공기, 마음의 떨림까지도 선명히 돌아옵니다. 소리는 기억보다 오래 남는 감각이자 마음을 회복시키는 조용한 힘입니다. 이 소리 풍경을 들으며 어디서든 그날의 순천을 마음에 펼쳐보세요.
             </p>
 
             <div class="controls">
@@ -57,5 +57,15 @@
 
     <audio id="audioPlayer" preload="auto"></audio>
     <script src="script.js"></script>
+    <script>
+        // Error logging for debugging
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.message, 'at', e.filename, ':', e.lineno, ':', e.colno);
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
+    </script>
 </body>
 </html>

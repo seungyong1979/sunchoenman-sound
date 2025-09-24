@@ -224,7 +224,30 @@ function toggleLanguage() {
 }
 
 // Initialize the player when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    initPlayer();
-    langBtn.addEventListener('click', toggleLanguage);
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    
+    // Check if all elements exist
+    const elementsToCheck = {
+        'audioPlayer': audioPlayer,
+        'playBtn': playBtn,
+        'langBtn': langBtn,
+        'playlistEl': playlistEl,
+        'albumImageEl': albumImageEl
+    };
+    
+    for (const [name, element] of Object.entries(elementsToCheck)) {
+        if (!element) {
+            console.error(`Element not found: ${name}`);
+        }
+    }
+    
+    try {
+        initPlayer();
+        if (langBtn) {
+            langBtn.addEventListener('click', toggleLanguage);
+        }
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 });
