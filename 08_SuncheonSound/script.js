@@ -191,8 +191,10 @@ function updateProgress() {
 
 // Seek functionality
 function seek(e) {
+    e.preventDefault();
     const rect = progressBar.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const percent = (clientX - rect.left) / rect.width;
     audioPlayer.currentTime = percent * audioPlayer.duration;
 }
 
@@ -208,6 +210,7 @@ audioPlayer.addEventListener('loadedmetadata', () => {
 audioPlayer.addEventListener('ended', nextTrack);
 
 progressBar.addEventListener('click', seek);
+progressBar.addEventListener('touchstart', seek);
 
 // Language toggle functionality
 function toggleLanguage() {
