@@ -111,13 +111,20 @@ function loadTrack(index) {
     currentTrackIndex = index;
     const track = playlist[index];
     
+    // Save current scroll position
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
     audioPlayer.src = track.mp3;
     
     // Update album image
-    albumImageEl.src = track.img;
-    albumImageEl.onerror = () => {
+    const newImg = new Image();
+    newImg.onload = () => {
+        albumImageEl.src = newImg.src;
+    };
+    newImg.onerror = () => {
         albumImageEl.src = 'img/2024.12.03_doorumi.jpg';
     };
+    newImg.src = track.img;
     
     // Update playlist active state
     document.querySelectorAll('.playlist-item').forEach((item, i) => {
@@ -130,6 +137,11 @@ function loadTrack(index) {
     
     // Update play button
     updatePlayButton();
+    
+    // Restore scroll position
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPosition);
+    });
 }
 
 // Play/Pause functionality
