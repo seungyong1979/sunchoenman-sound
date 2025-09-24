@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Path Test</title>
+</head>
+<body>
+    <h1>Path Test Page</h1>
+    <p>If you can see this, HTML is loading correctly.</p>
+    
+    <h2>CSS Test:</h2>
+    <div id="css-test">CSS not loaded</div>
+    <style>
+        #css-test { color: green; }
+        #css-test::after { content: " - CSS loaded successfully!"; }
+    </style>
+    
+    <h2>JavaScript Test:</h2>
+    <div id="js-test">JavaScript not loaded</div>
+    
+    <h2>Image Test:</h2>
+    <img src="img/default.jpg" width="50" alt="Test image" onerror="this.alt='Image failed to load'">
+    
+    <h2>MP3 Test:</h2>
+    <audio controls>
+        <source src="mp3/2024.12.03 doorumi.mp3" type="audio/mpeg">
+        Your browser does not support audio.
+    </audio>
+    
+    <script>
+        document.getElementById('js-test').textContent = 'JavaScript loaded successfully!';
+        
+        // Check console for errors
+        console.log('Test page loaded at:', window.location.href);
+        console.log('Base path:', window.location.pathname);
+    </script>
+</body>
+</html>
