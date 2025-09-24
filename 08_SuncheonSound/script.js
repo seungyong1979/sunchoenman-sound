@@ -40,8 +40,8 @@ async function initPlayer() {
         id: index,
         nameKo: track.nameKo,
         nameEn: track.nameEn,
-        mp3: `mp3/${track.file}`,
-        img: `img/${track.file.replace('.mp3', '.jpg')}`,
+        mp3: `mp3/${encodeURIComponent(track.file)}`,
+        img: `img/${encodeURIComponent(track.file.replace('.mp3', '.jpg'))}`,
         duration: '00:00'
     }));
 
