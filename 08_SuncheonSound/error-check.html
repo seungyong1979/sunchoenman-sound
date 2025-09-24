@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>에러 체크</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .error { background: #ffdddd; padding: 10px; margin: 5px 0; border: 1px solid #ff0000; }
+        .success { background: #ddffdd; padding: 10px; margin: 5px 0; border: 1px solid #00ff00; }
+        .info { background: #f0f0f0; padding: 10px; margin: 5px 0; border: 1px solid #999; }
+    </style>
+</head>
+<body>
+    <h1>사운드 순천 에러 체크</h1>
+    <div id="results"></div>
+    
+    <h2>메인 페이지 테스트:</h2>
+    <iframe id="mainPage" src="index.html" style="width: 100%; height: 400px; border: 1px solid #ccc;"></iframe>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addMessage(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        // 에러 캐치
+        window.addEventListener('error', function(e) {
+            addMessage(`에러 발생: ${e.message} (줄 ${e.lineno})`, 'error');
+        });
+        
+        // iframe 내부 에러 캐치
+        window.addEventListener('message', function(e) {
+            if (e.data.type === 'error') {
+                addMessage(`페이지 에러: ${e.data.message}`, 'error');
+            }
+        });
+        
+        // 페이지 로드 체크
+        window.addEventListener('load', function() {
+            addMessage('error-check.html 로드 완료', 'success');
+            
+            // iframe 체크
+            const iframe = document.getElementById('mainPage');
+            iframe.addEventListener('load', function() {
+                addMessage('index.html 로드 완료', 'success');
+                
+                try {
+                    // iframe 내부 확인
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const audioElement = iframeDoc.getElementById('audioPlayer');
+                    
+                    if (audioElement) {
+                        addMessage('오디오 요소 찾음', 'success');
+                    } else {
+                        addMessage('오디오 요소를 찾을 수 없음', 'error');
+                    }
+                    
+                    // 스크립트 실행 확인
+                    const scripts = iframeDoc.getElementsByTagName('script');
+                    addMessage(`스크립트 개수: ${scripts.length}개`, 'info');
+                    
+                } catch (err) {
+                    addMessage(`iframe 접근 에러: ${err.message}`, 'error');
+                }
+            });
+        });
+        
+        // 초기 체크
+        addMessage('에러 체크 시작...', 'info');
+    </script>
+</body>
+</html>
