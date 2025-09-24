@@ -16,17 +16,17 @@ let isPlaying = false;
 let currentTrackIndex = 0;
 let playlist = [];
 
-// Initialize playlist (you can modify this based on your MP3 files)
+// Initialize playlist - using underscores instead of spaces
 const tracks = [
     { 
         nameKo: '흑두루미의 노래', 
         nameEn: 'Song of Hooded Cranes',
-        file: '2024.12.03 doorumi.mp3' 
+        file: '2024.12.03_doorumi.mp3' 
     },
     { 
         nameKo: '갈대의 속삭임', 
         nameEn: 'Whispers of Reeds',
-        file: '2024.12.03 reed.mp3' 
+        file: '2024.12.03_reed.mp3' 
     }
 ];
 
@@ -40,8 +40,8 @@ async function initPlayer() {
         id: index,
         nameKo: track.nameKo,
         nameEn: track.nameEn,
-        mp3: `mp3/${encodeURIComponent(track.file)}`,
-        img: `img/${encodeURIComponent(track.file.replace('.mp3', '.jpg'))}`,
+        mp3: `mp3/${track.file}`,
+        img: `img/${track.file.replace('.mp3', '.jpg')}`,
         duration: '00:00'
     }));
 
@@ -87,7 +87,7 @@ function renderPlaylist() {
         const name = currentLang === 'ko' ? track.nameKo : track.nameEn;
         return `
             <div class="playlist-item ${index === currentTrackIndex ? 'active' : ''}" data-index="${index}">
-                <img src="${track.img}" alt="${name}" onerror="this.src='img/default.jpg'">
+                <img src="${track.img}" alt="${name}" onerror="this.src='img/2024.12.03_doorumi.jpg'">
                 <div class="playlist-item-info">
                     <div class="playlist-item-title">${name}</div>
                     <div class="playlist-item-duration">${track.duration || '--:--'}</div>
@@ -116,7 +116,7 @@ function loadTrack(index) {
     // Update album image
     albumImageEl.src = track.img;
     albumImageEl.onerror = () => {
-        albumImageEl.src = 'img/default.jpg';
+        albumImageEl.src = 'img/2024.12.03_doorumi.jpg';
     };
     
     // Update playlist active state
